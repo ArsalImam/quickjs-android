@@ -51,6 +51,12 @@ public class JSObject extends JSValue {
       return jsContext.wrapAsJSValue(property);
     }
   }
+  public String[] getObjectKeys() {
+    synchronized (jsContext.jsRuntime) {
+      long context = jsContext.checkClosed();
+      return QuickJS.getValuePropertyNames(context, pointer);
+    }
+  }
 
   /**
    * Returns the property as a JSValue.
