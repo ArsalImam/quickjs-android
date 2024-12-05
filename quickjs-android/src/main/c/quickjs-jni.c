@@ -764,6 +764,56 @@ Java_com_shiqi_quickjs_QuickJS_getValueProperty__JJI(
     return (jlong) result;
 }
 
+JNIEXPORT jobjectArray JNICALL
+Java_com_shiqi_quickjs_QuickJS_getValuePropertyNames__JJ(
+        JNIEnv *env,
+        jclass __unused clazz,
+        jlong context,
+        jlong value
+) {
+    JSContext *ctx = (JSContext *) context;
+    CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
+    JSValue *val = (JSValue *) value;
+    CHECK_NULL_RET(env, val, MSG_NULL_JS_VALUE);
+
+    JSPropertyEnum *props = NULL;
+    uint32_t prop_count = 0;
+
+    int ret = JS_GetOwnPropertyNames(ctx, &props, &prop_count, *val, JS_GPN_STRING_MASK | JS_GPN_SYMBOL_MASK | JS_GPN_ENUM_ONLY);
+    if (ret < 0) {
+        return NULL;
+    }
+
+    jclass stringClass = (*env)->FindClass(env, "java/lang/String");
+    if (stringClass == NULL) {
+        js_free_prop_enum(ctx, props, prop_count);
+        return NULL;
+    }
+
+    jobjectArray result_array = (*env)->NewObjectArray(env, prop_count, stringClass, NULL);
+    if (result_array == NULL) {
+        js_free_prop_enum(ctx, props, prop_count);
+        return NULL;
+    }
+
+    for (uint32_t i = 0; i < prop_count; ++i) {
+        JSValue key = JS_AtomToValue(ctx, props[i].atom);
+        if (JS_IsString(key)) {
+            const char *str = JS_ToCString(ctx, key);
+            if (str != NULL) {
+                jstring java_str = (*env)->NewStringUTF(env, str);
+                (*env)->SetObjectArrayElement(env, result_array, i, java_str);
+                (*env)->DeleteLocalRef(env, java_str);
+                JS_FreeCString(ctx, str);
+            }
+        }
+        JS_FreeValue(ctx, key);
+    }
+
+    js_free_prop_enum(ctx, props, prop_count);
+    return result_array;
+}
+
 JNIEXPORT jlong JNICALL
 Java_com_shiqi_quickjs_QuickJS_getValueProperty__JJLjava_lang_String_2(
     JNIEnv *env,
