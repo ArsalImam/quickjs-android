@@ -724,7 +724,6 @@ static js_force_inline JSValue JS_GetProperty(JSContext* ctx, JSValueConst this_
 }
 JSValue JS_GetPropertyStr(JSContext* ctx, JSValueConst this_obj, const char* prop);
 JSValue JS_GetPropertyUint32(JSContext* ctx, JSValueConst this_obj, uint32_t idx);
-
 int JS_SetPropertyInternal(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, InlineCache *ic);
 int JS_SetPropertyInternalWithIC(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, InlineCache *ic, int32_t offset);
 static inline int JS_SetProperty(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val) {
@@ -749,6 +748,7 @@ JSValue JS_GetPrototype(JSContext *ctx, JSValueConst val);
 #define JS_GPN_SET_ENUM     (1 << 5)
 
 int JS_GetOwnPropertyNames(JSContext* ctx, JSPropertyEnum** ptab, uint32_t* plen, JSValueConst obj, int flags);
+void js_free_prop_enum(JSContext* ctx, JSPropertyEnum* tab, uint32_t len);
 int JS_GetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueConst obj, JSAtom prop);
 
 JSValue JS_Call(JSContext* ctx, JSValueConst func_obj, JSValueConst this_obj, int argc, JSValueConst* argv);

@@ -143,6 +143,7 @@ public class QuickJS {
   static native boolean isValueArrayBuffer(long context, long value);
   static native boolean isValueFunction(long context, long value);
   static native long getValueProperty(long context, long value, int index);
+  static native String[] getValuePropertyNames(long context, long value);
   static native long getValueProperty(long context, long value, String name);
   static native boolean setValueProperty(long context, long value, int index, long property);
   static native boolean setValueProperty(long context, long value, String name, long property);
