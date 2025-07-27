@@ -6,7 +6,7 @@ def gradleProperties = new Properties()
 file("../gradle.properties").withInputStream { gradleProperties.load(it) }
 
 // Retrieve the version of the "quickjs" library from the version catalog (libs.versions.toml).
-def quickjsVersion = "0.0.6"
+def quickjsVersion = "0.0.7"
 
 // This block will be executed after the project evaluation, to ensure that all configurations are available.
 afterEvaluate {
@@ -18,7 +18,7 @@ afterEvaluate {
                 publication.version = quickjsVersion
 
                 // Define the artifact to be published (AAR file) by specifying its location.
-                publication.artifact("build/outputs/aar/quickjs-android-debug.aar") {
+                publication.artifact("build/outputs/aar/quickjs-android-release.aar") {
                     extension = "aar"
                 }
 

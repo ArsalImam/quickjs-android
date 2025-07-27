@@ -12,7 +12,7 @@ plugins {
  *
  * QuickJS version is maintained in libs.versions.toml as quickjs
  */
-// apply(from = "upload-quickjs.gradle.kts")
+// apply(from = "upload-quickjs.gradle")
 
 android {
     namespace = "com.shiqi.quickjs"
