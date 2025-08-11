@@ -1,5 +1,5 @@
 package com.shiqi.testquickjs
-import android.content.Context
+/*import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Handler
@@ -24,12 +24,12 @@ import com.tencent.mtt.hippy.utils.*
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
+*//**
  * Description :
  *
  * @Author : robertrchen
  * @Date : 2022/7/26
- */
+ *//*
 class HippyJsEngine(private val context: Context) : HippyBridge.BridgeCallback {
     companion object {
 
@@ -119,7 +119,7 @@ class HippyJsEngine(private val context: Context) : HippyBridge.BridgeCallback {
         val dimensionMap = DimensionsUtil.getDimensions(-1, -1, context, false)
         globalParams.pushMap("Dimensions", dimensionMap)
         var packageName = ""
-        var versionName = ""
+        var versionName: String? = ""
         val extraDataMap = HippyMap()
         try {
             val packageManager = context.packageManager
@@ -254,4 +254,4 @@ class HippyJsEngine(private val context: Context) : HippyBridge.BridgeCallback {
         TODO("Not yet implemented")
     }
 
-}
+}*/

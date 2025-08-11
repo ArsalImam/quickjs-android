@@ -1,0 +1,48 @@
+import java.util.Properties
+import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.PublishingExtension
+
+def gradleProperties = new Properties()
+file("../gradle.properties").withInputStream { gradleProperties.load(it) }
+
+// Retrieve the version of the "quickjs" library from the version catalog (libs.versions.toml).
+def quickjsVersion = "0.0.7"
+
+// This block will be executed after the project evaluation, to ensure that all configurations are available.
+afterEvaluate {
+    extensions.configure(PublishingExtension) { publishing ->
+        publishing.publications { publications ->
+            publications.create("QuickJS", MavenPublication) { publication ->
+                publication.groupId = "com.purewl.quickjs"
+                publication.artifactId = "quickjs"
+                publication.version = quickjsVersion
+
+                // Define the artifact to be published (AAR file) by specifying its location.
+                publication.artifact("build/outputs/aar/quickjs-android-release.aar") {
+                    extension = "aar"
+                }
+
+                publication.pom.withXml {
+                    def node = asNode()
+                    def repositoriesNode = node.appendNode("repositories")
+                    def repositoryNode = repositoriesNode.appendNode("repository")
+                    repositoryNode.appendNode("id", "GitHubPackages")
+                    repositoryNode.appendNode("url", "https://maven.pkg.github.com/amirraza/private-keep")
+                }
+            }
+        }
+
+        // Define where the Maven artifacts will be published.
+        publishing.repositories { repositories ->
+            repositories.maven { repo ->
+                repo.name = "GitHubPackages"
+                repo.url = uri("https://maven.pkg.github.com/amirraza/private-keep")
+
+                repo.credentials {
+                    username = gradleProperties.getProperty("GitHubPackagesUsername") ?: ""
+                    password = gradleProperties.getProperty("GitHubPackagesPassword") ?: ""
+                }
+            }
+        }
+    }
+}
